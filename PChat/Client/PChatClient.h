@@ -1,10 +1,20 @@
 #pragma once
 #include <string>
 #include <boost/asio/ip/tcp.hpp>
+#include <condition_variable>
+
+struct ProgramStatus
+{
+	std::mutex mutex;
+	std::condition_variable condition;
+	bool finished = false;
+};
 
 class PChatClient
 {
 public:
+	static ProgramStatus m_status;
+	
 	PChatClient(const std::string& _host, int _port);
 
 	void execute();

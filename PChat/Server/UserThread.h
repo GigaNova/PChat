@@ -9,15 +9,13 @@ class UserThread : public Thread
 {
 public:
 	UserThread(std::shared_ptr<boost::asio::ip::tcp::socket> _socket, PChatServer* _instance);
-
-	void start();
-	void setOwner(User* _owner);
 	
+	void setOwner(User* _owner);
 	void sendMessage(const std::string& _message) const;
 private:
 	void run() const;
 	
 	std::shared_ptr<boost::asio::ip::tcp::socket> m_socket;
 	PChatServer* m_instance;
-	User* m_owner;
+	User* m_owner = nullptr;
 };

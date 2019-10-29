@@ -5,6 +5,8 @@
 #include "ReadThread.h"
 #include "WriteThread.h"
 
+ProgramStatus PChatClient::m_status{};
+
 PChatClient::PChatClient(const std::string& _host, int _port) : m_host(_host), m_port(_port)
 {
 	
@@ -24,16 +26,21 @@ void PChatClient::execute()
 	try {
 		auto rThread = new ReadThread(m_socket, this);
 		auto wThread = new WriteThread(m_socket, this);
+
+		rThread->start();
+		wThread->start();
 	}
 	catch (std::exception& e)
 	{
 		std::cout << "Could not start client: " << e.what() << std::endl;
 	}
 
-	while(true)
+	while(!m_status.finished)
 	{
 		//Wait
 	}
+
+	m_socket->close();
 }
 
 const std::string& PChatClient::getUserName() const
